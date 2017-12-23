@@ -8,7 +8,7 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 
-open class AndroidRxManager<TEvent>(private val lifecycleProvider: LifecycleProvider<TEvent>) : RxManager {
+open class AndroidRxManager<Event>(private val lifecycleProvider: LifecycleProvider<Event>) : RxManager {
     override fun autoManage(target: Completable): Completable = target.bindToLifecycle(lifecycleProvider)
 
     override fun <T> autoManage(target: Maybe<T>): Maybe<T> = target.bindToLifecycle(lifecycleProvider)

@@ -1,7 +1,7 @@
 package christina.library.android.common
 
+import christina.common.event.core.Event
 import christina.library.android.common.event.data.RequestPermissionsResultEventData
-import christina.common.event.Event
 
 interface RequestPermissionsResultProvider {
     val onRequestPermissionsResult: Event<RequestPermissionsResultEventData>

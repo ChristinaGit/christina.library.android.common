@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.CheckResult
 import android.support.v7.app.AppCompatActivity
-import christina.common.event.Event
 import christina.common.event.Events
-import christina.common.event.invoke
+import christina.common.event.core.Event
+import christina.common.event.core.invoke
 import christina.library.android.common.ActivityResultProvider
 import christina.library.android.common.RequestPermissionsResultProvider
 import christina.library.android.common.event.data.ActivityResultEventData

@@ -1,8 +1,8 @@
 package christina.library.android.common
 
-import christina.common.event.core.Event
-import christina.library.android.common.event.data.RequestPermissionsResultEventData
+import christina.library.android.common.event.RequestPermissionsResultEvent
+import io.reactivex.Observable
 
 interface RequestPermissionsResultProvider {
-    val onRequestPermissionsResult: Event<RequestPermissionsResultEventData>
+    val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
 }

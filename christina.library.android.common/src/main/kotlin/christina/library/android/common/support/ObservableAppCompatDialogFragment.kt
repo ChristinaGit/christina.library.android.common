@@ -7,13 +7,11 @@ import android.support.annotation.CallSuper
 import android.support.annotation.CheckResult
 import android.support.v7.app.AppCompatDialogFragment
 import android.view.View
-import christina.common.event.Events
-import christina.common.event.core.Event
-import christina.common.event.core.invoke
+import christina.common.rx.event.invoke
 import christina.library.android.common.ActivityResultProvider
 import christina.library.android.common.RequestPermissionsResultProvider
-import christina.library.android.common.event.data.ActivityResultEventData
-import christina.library.android.common.event.data.RequestPermissionsResultEventData
+import christina.library.android.common.event.ActivityResultEvent
+import christina.library.android.common.event.RequestPermissionsResultEvent
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.RxLifecycle
@@ -21,16 +19,18 @@ import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid.bindFragment
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
 abstract class ObservableAppCompatDialogFragment : AppCompatDialogFragment(),
-    ActivityResultProvider,
-    RequestPermissionsResultProvider,
-    LifecycleProvider<FragmentEvent> {
-    final override val onRequestPermissionsResult: Event<RequestPermissionsResultEventData>
-        get() = onRequestPermissionsResultEvent
+                                                   ActivityResultProvider,
+                                                   RequestPermissionsResultProvider,
+                                                   LifecycleProvider<FragmentEvent> {
+    final override val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
+        get() = onRequestPermissionsResultEvent.hide()
 
-    final override val onActivityResult: Event<ActivityResultEventData>
-        get() = onActivityResultEvent
+    final override val onActivityResult: Observable<ActivityResultEvent>
+        get() = onActivityResultEvent.hide()
 
     @CheckResult
     final override fun lifecycle(): Observable<FragmentEvent> = lifecycleSubject.hide()
@@ -46,17 +46,22 @@ abstract class ObservableAppCompatDialogFragment : AppCompatDialogFragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        onActivityResultEvent(ActivityResultEventData(requestCode, resultCode, data))
+        onActivityResultEvent(ActivityResultEvent(requestCode, resultCode, data))
     }
 
     @CallSuper
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray) {
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        onRequestPermissionsResultEvent(RequestPermissionsResultEventData(requestCode, permissions.toList(), grantResults.toList()))
+        onRequestPermissionsResultEvent(
+            RequestPermissionsResultEvent(
+                requestCode,
+                permissions.toList(),
+                grantResults.toList()))
     }
 
     @CallSuper
@@ -142,7 +147,7 @@ abstract class ObservableAppCompatDialogFragment : AppCompatDialogFragment(),
 
     private fun riseLifecycleEvent(event: FragmentEvent) = lifecycleSubject.onNext(event)
 
-    private val lifecycleSubject = BehaviorSubject.create<FragmentEvent>()
-    private val onRequestPermissionsResultEvent = Events.basic<RequestPermissionsResultEventData>()
-    private val onActivityResultEvent = Events.basic<ActivityResultEventData>()
+    private val lifecycleSubject: Subject<FragmentEvent> = BehaviorSubject.create()
+    private val onRequestPermissionsResultEvent: Subject<RequestPermissionsResultEvent> = PublishSubject.create()
+    private val onActivityResultEvent: Subject<ActivityResultEvent> = PublishSubject.create()
 }

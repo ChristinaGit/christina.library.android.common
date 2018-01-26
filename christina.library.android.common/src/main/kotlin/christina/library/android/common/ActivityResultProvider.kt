@@ -1,9 +1,8 @@
 package christina.library.android.common
 
-import christina.common.event.core.Event
-import christina.library.android.common.event.data.ActivityResultEventData
+import christina.library.android.common.event.ActivityResultEvent
+import io.reactivex.Observable
 
 interface ActivityResultProvider {
-    val onActivityResult: Event<ActivityResultEventData>
+    val onActivityResult: Observable<ActivityResultEvent>
 }
-

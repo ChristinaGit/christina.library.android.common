@@ -22,10 +22,11 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-abstract class ObservableAppCompatDialogFragment : AppCompatDialogFragment(),
-                                                   ActivityResultProvider,
-                                                   RequestPermissionsResultProvider,
-                                                   LifecycleProvider<FragmentEvent> {
+abstract class ObservableAppCompatDialogFragment
+    : AppCompatDialogFragment(),
+      ActivityResultProvider,
+      RequestPermissionsResultProvider,
+      LifecycleProvider<FragmentEvent> {
     final override val onRequestPermissionsResult: Observable<RequestPermissionsResultEvent>
         get() = onRequestPermissionsResultEvent.hide()
 
@@ -81,7 +82,7 @@ abstract class ObservableAppCompatDialogFragment : AppCompatDialogFragment(),
     }
 
     @CallSuper
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         riseLifecycleEvent(FragmentEvent.CREATE_VIEW)

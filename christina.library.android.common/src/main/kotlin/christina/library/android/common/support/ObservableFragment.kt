@@ -80,7 +80,7 @@ abstract class ObservableFragment
     }
 
     @CallSuper
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         riseLifecycleEvent(FragmentEvent.CREATE_VIEW)

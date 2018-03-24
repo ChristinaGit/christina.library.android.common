@@ -1,4 +1,0 @@
-include ':christina.library.common.android'
-include ':christina.library.common'
-
-project(':christina.library.common').projectDir = new File('christina.library.common')
